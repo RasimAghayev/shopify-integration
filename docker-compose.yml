@@ -4,7 +4,7 @@ services:
       context: ./backend
       dockerfile: docker/Dockerfile
       target: development
-    container_name: shopify-backend
+    container_name: si-backend
     volumes:
       - ./backend:/var/www/html
     environment:
@@ -25,14 +25,14 @@ services:
       redis:
         condition: service_healthy
     networks:
-      - shopify-network
+      - si-network
 
   queue-worker:
     build:
       context: ./backend
       dockerfile: docker/Dockerfile
       target: development
-    container_name: shopify-queue
+    container_name: si-queue
     command: php artisan queue:work --tries=3 --timeout=90
     volumes:
       - ./backend:/var/www/html
@@ -48,7 +48,7 @@ services:
       redis:
         condition: service_healthy
     networks:
-      - shopify-network
+      - si-network
     restart: unless-stopped
 
   frontend:
@@ -56,7 +56,7 @@ services:
       context: ./frontend
       dockerfile: docker/Dockerfile
       target: development
-    container_name: shopify-frontend
+    container_name: si-frontend
     volumes:
       - ./frontend:/app
       - frontend-node-modules:/app/node_modules
@@ -66,13 +66,13 @@ services:
       - "3000:3000"
       - "24678:24678"
     networks:
-      - shopify-network
+      - si-network
     command: npm run dev
 
   nginx:
     build:
       context: ./infrastructure/docker/nginx
-    container_name: shopify-nginx
+    container_name: si-nginx
     volumes:
       - ./infrastructure/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./backend/public:/var/www/html/public
@@ -82,11 +82,11 @@ services:
       - backend
       - frontend
     networks:
-      - shopify-network
+      - si-network
 
   postgres:
     image: postgres:16-alpine
-    container_name: shopify-postgres
+    container_name: si-postgres
     environment:
       POSTGRES_DB: shopify_integration
       POSTGRES_USER: shopify
@@ -96,7 +96,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - shopify-network
+      - si-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U shopify -d shopify_integration"]
       interval: 10s
@@ -105,13 +105,13 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: shopify-redis
+    container_name: si-redis
     volumes:
       - redis-data:/data
     ports:
       - "6379:6379"
     networks:
-      - shopify-network
+      - si-network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -124,5 +124,5 @@ volumes:
   frontend-node-modules:
 
 networks:
-  shopify-network:
+  si-network:
     driver: bridge
