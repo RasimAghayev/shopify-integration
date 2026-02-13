@@ -1,5 +1,5 @@
 # Stage 1: Base
-FROM php:8.5-fpm-alpine AS base
+FROM php:8.4-fpm-alpine AS base
 
 RUN apk add --no-cache \
     bash \
@@ -17,11 +17,11 @@ RUN apk add --no-cache \
     g++ \
     make
 
+# Note: mbstring is built-in since PHP 8.4
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         pdo \
         pdo_pgsql \
-        mbstring \
         zip \
         exif \
         pcntl \
