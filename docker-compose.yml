@@ -1,0 +1,128 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: docker/Dockerfile
+      target: development
+    container_name: shopify-backend
+    volumes:
+      - ./backend:/var/www/html
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=shopify_integration
+      - DB_USERNAME=shopify
+      - DB_PASSWORD=secret
+      - REDIS_HOST=redis
+      - QUEUE_CONNECTION=redis
+    ports:
+      - "9000:9000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - shopify-network
+
+  queue-worker:
+    build:
+      context: ./backend
+      dockerfile: docker/Dockerfile
+      target: development
+    container_name: shopify-queue
+    command: php artisan queue:work --tries=3 --timeout=90
+    volumes:
+      - ./backend:/var/www/html
+    environment:
+      - APP_ENV=local
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+    depends_on:
+      backend:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - shopify-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: docker/Dockerfile
+      target: development
+    container_name: shopify-frontend
+    volumes:
+      - ./frontend:/app
+      - frontend-node-modules:/app/node_modules
+    environment:
+      - NUXT_PUBLIC_API_BASE=http://localhost/api
+    ports:
+      - "3000:3000"
+      - "24678:24678"
+    networks:
+      - shopify-network
+    command: npm run dev
+
+  nginx:
+    build:
+      context: ./infrastructure/docker/nginx
+    container_name: shopify-nginx
+    volumes:
+      - ./infrastructure/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./backend/public:/var/www/html/public
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - shopify-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: shopify-postgres
+    environment:
+      POSTGRES_DB: shopify_integration
+      POSTGRES_USER: shopify
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - shopify-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shopify -d shopify_integration"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: shopify-redis
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - shopify-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
+  redis-data:
+  frontend-node-modules:
+
+networks:
+  shopify-network:
+    driver: bridge
