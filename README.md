@@ -41,7 +41,7 @@ This project is a comprehensive **Shopify Integration System** designed to demon
 - ✅ **Clean Architecture** - Domain-driven design with clear layer separation
 - ✅ **SOLID Principles** - Maintainable, testable, and extensible code
 - ✅ **TDD Approach** - Test-first development methodology
-- ✅ **Modern PHP 8.3** - Typed properties, readonly classes, enums
+- ✅ **Modern PHP 8.4** - Typed properties, readonly classes, enums
 - ✅ **Vue 3 + TypeScript** - Type-safe reactive frontend
 - ✅ **RESTful API** - Well-designed HTTP interface
 - ✅ **Production-Ready** - Docker, CI/CD, monitoring
@@ -194,13 +194,13 @@ shopify-integration/
 
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| **PHP** | 8.3+ | Programming language |
-| **Laravel** | 12 | Web framework |
-| **PostgreSQL** | 16 | Primary database |
-| **Redis** | 7 | Cache & queue |
-| **Guzzle** | 7 | HTTP client |
-| **PHPUnit** | 11 | Testing framework |
-| **Laravel Pint** | Latest | Code style |
+| **PHP** | 8.4+    | Programming language |
+| **Laravel** | 12      | Web framework |
+| **PostgreSQL** | 16      | Primary database |
+| **Redis** | 7       | Cache & queue |
+| **Guzzle** | 7       | HTTP client |
+| **PHPUnit** | 11      | Testing framework |
+| **Laravel Pint** | Latest  | Code style |
 | **PHPStan** | Level 8 | Static analysis |
 
 ### Frontend
@@ -240,7 +240,7 @@ Before you begin, ensure you have the following installed:
 
 ### Optional (for manual setup)
 
-- **PHP** 8.3+
+- **PHP** 8.4+
 - **Composer** 2.7+
 - **Node.js** 20+ & **npm** 10+
 - **PostgreSQL** 16+
@@ -1022,7 +1022,7 @@ docker compose exec frontend npm run type-check
 Runs on every push and pull request:
 
 1. **Backend Tests**
-   - PHP 8.3 setup
+   - PHP 8.4 setup
    - Composer install
    - PostgreSQL service
    - Redis service

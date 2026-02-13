@@ -23,6 +23,14 @@ Thumbs.db
 /backend/storage/logs/*
 !/backend/storage/logs/.gitkeep
 
+# Views
+/backend/storage/framework/views/*
+!/backend/storage/framework/views/.gitkeep
+
+# Sessions
+/backend/storage/framework/sessions/*
+!/backend/storage/framework/sessions/.gitkeep
+
 # Cache
 /backend/bootstrap/cache/*
 !/backend/bootstrap/cache/.gitkeep
