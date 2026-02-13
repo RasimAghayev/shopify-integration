@@ -83,12 +83,7 @@ migrate:
 
 seed:
 	@echo "$(GREEN)Seeding database with mock products...$(NC)"
-	@docker compose exec backend php artisan tinker --execute="\
-		\$$useCase = app(\Src\Application\UseCases\Product\SyncProductFromShopify\SyncProductFromShopifyUseCase::class); \
-		\$$useCase->execute(new \Src\Application\UseCases\Product\SyncProductFromShopify\SyncProductDTO('632910392')); \
-		\$$useCase->execute(new \Src\Application\UseCases\Product\SyncProductFromShopify\SyncProductDTO('921728736')); \
-		\$$useCase->execute(new \Src\Application\UseCases\Product\SyncProductFromShopify\SyncProductDTO('789456123')); \
-		echo 'Seeded 3 products successfully!';"
+	docker compose exec backend php artisan db:seed
 	@echo "$(GREEN)Database seeded!$(NC)"
 
 fresh:
