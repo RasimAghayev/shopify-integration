@@ -116,76 +116,56 @@ final readonly class Product
         );
     }
 
-    public function withTitle(string $title): self
+    /**
+     * Creates a new instance with specified property changes (Wither pattern)
+     *
+     * @param  array<string, mixed>  $changes
+     */
+    private function with(array $changes): self
     {
-        return new self(
-            sku: $this->sku,
-            title: $title,
-            price: $this->price,
-            status: $this->status,
-            inventoryQuantity: $this->inventoryQuantity,
-            createdAt: $this->createdAt,
-            updatedAt: new DateTimeImmutable,
-            id: $this->id,
-            description: $this->description,
-            shopifyId: $this->shopifyId,
-            variants: $this->variants,
-        );
-    }
-
-    public function withPrice(Price $price): self
-    {
-        return new self(
-            sku: $this->sku,
-            title: $this->title,
-            price: $price,
-            status: $this->status,
-            inventoryQuantity: $this->inventoryQuantity,
-            createdAt: $this->createdAt,
-            updatedAt: new DateTimeImmutable,
-            id: $this->id,
-            description: $this->description,
-            shopifyId: $this->shopifyId,
-            variants: $this->variants,
-        );
-    }
-
-    public function withStatus(ProductStatus $status): self
-    {
-        return new self(
-            sku: $this->sku,
-            title: $this->title,
-            price: $this->price,
-            status: $status,
-            inventoryQuantity: $this->inventoryQuantity,
-            createdAt: $this->createdAt,
-            updatedAt: new DateTimeImmutable,
-            id: $this->id,
-            description: $this->description,
-            shopifyId: $this->shopifyId,
-            variants: $this->variants,
-        );
-    }
-
-    public function withInventoryQuantity(int $quantity): self
-    {
-        if ($quantity < 0) {
+        $inventoryQuantity = $changes['inventoryQuantity'] ?? $this->inventoryQuantity;
+        if ($inventoryQuantity < 0) {
             throw new InvalidArgumentException('Inventory quantity cannot be negative');
         }
 
         return new self(
             sku: $this->sku,
-            title: $this->title,
-            price: $this->price,
-            status: $this->status,
-            inventoryQuantity: $quantity,
+            title: $changes['title'] ?? $this->title,
+            price: $changes['price'] ?? $this->price,
+            status: $changes['status'] ?? $this->status,
+            inventoryQuantity: $inventoryQuantity,
             createdAt: $this->createdAt,
-            updatedAt: new DateTimeImmutable,
+            updatedAt: $changes['updatedAt'] ?? new DateTimeImmutable,
             id: $this->id,
-            description: $this->description,
+            description: $changes['description'] ?? $this->description,
             shopifyId: $this->shopifyId,
-            variants: $this->variants,
+            variants: $changes['variants'] ?? $this->variants,
         );
+    }
+
+    public function withTitle(string $title): self
+    {
+        return $this->with(['title' => $title]);
+    }
+
+    public function withPrice(Price $price): self
+    {
+        return $this->with(['price' => $price]);
+    }
+
+    public function withStatus(ProductStatus $status): self
+    {
+        return $this->with(['status' => $status]);
+    }
+
+    public function withInventoryQuantity(int $quantity): self
+    {
+        return $this->with(['inventoryQuantity' => $quantity]);
+    }
+
+    public function withDescription(?string $description): self
+    {
+        return $this->with(['description' => $description]);
     }
 
     public function addVariant(ProductVariant $variant): self
@@ -193,19 +173,7 @@ final readonly class Product
         $variants = $this->variants;
         $variants[] = $variant;
 
-        return new self(
-            sku: $this->sku,
-            title: $this->title,
-            price: $this->price,
-            status: $this->status,
-            inventoryQuantity: $this->inventoryQuantity,
-            createdAt: $this->createdAt,
-            updatedAt: new DateTimeImmutable,
-            id: $this->id,
-            description: $this->description,
-            shopifyId: $this->shopifyId,
-            variants: $variants,
-        );
+        return $this->with(['variants' => $variants]);
     }
 
     public function isInStock(): bool
@@ -216,26 +184,5 @@ final readonly class Product
     public function isActive(): bool
     {
         return $this->status->isActive();
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id,
-            'sku' => $this->sku->value,
-            'title' => $this->title,
-            'description' => $this->description,
-            'price' => $this->price->amount,
-            'currency' => $this->price->currency->value,
-            'status' => $this->status->value,
-            'inventory_quantity' => $this->inventoryQuantity,
-            'shopify_id' => $this->shopifyId,
-            'variants' => array_map(static fn (ProductVariant $v) => $v->toArray(), $this->variants),
-            'created_at' => $this->createdAt->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updatedAt->format('Y-m-d H:i:s'),
-        ];
     }
 }

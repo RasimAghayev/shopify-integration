@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Src\Application\UseCases\Product\SyncProductFromShopify;
 
-use Illuminate\Support\Facades\Cache;
+use Src\Application\Contracts\CacheInterface;
 use Src\Application\Contracts\EventDispatcherInterface;
 use Src\Application\Contracts\LoggerInterface;
 use Src\Application\Contracts\ShopifyClientInterface;
+use Src\Application\Services\CacheKeyGenerator;
 use Src\Domain\Product\Entities\Product;
 use Src\Domain\Product\Events\ProductSynced;
 use Src\Domain\Product\Repositories\ProductRepositoryInterface;
@@ -20,6 +21,8 @@ final readonly class SyncProductFromShopifyUseCase
         private ProductRepositoryInterface $productRepository,
         private EventDispatcherInterface $eventDispatcher,
         private LoggerInterface $logger,
+        private CacheInterface $cache,
+        private CacheKeyGenerator $cacheKeyGenerator,
     ) {}
 
     public function execute(SyncProductDTO $dto): Product
@@ -95,14 +98,7 @@ final readonly class SyncProductFromShopifyUseCase
 
     private function invalidateProductsCache(): void
     {
-        // Clear all products list cache entries
-        $pages = range(1, 20); // Clear first 20 pages
-        $perPageOptions = [10, 20, 50, 100];
-
-        foreach ($pages as $page) {
-            foreach ($perPageOptions as $perPage) {
-                Cache::forget("products_json_{$page}_{$perPage}");
-            }
-        }
+        // Use tag-based invalidation for efficiency (single operation instead of 80 iterations)
+        $this->cache->flushTags([$this->cacheKeyGenerator->getProductsTag()]);
     }
 }

@@ -73,51 +73,41 @@ final readonly class ProductVariant
         );
     }
 
-    public function withPrice(Price $price): self
+    /**
+     * Creates a new instance with specified property changes (Wither pattern)
+     *
+     * @param  array<string, mixed>  $changes
+     */
+    private function with(array $changes): self
     {
+        $inventoryQuantity = $changes['inventoryQuantity'] ?? $this->inventoryQuantity;
+        if ($inventoryQuantity < 0) {
+            throw new InvalidArgumentException('Inventory quantity cannot be negative');
+        }
+
         return new self(
             sku: $this->sku,
-            price: $price,
-            inventoryQuantity: $this->inventoryQuantity,
+            price: $changes['price'] ?? $this->price,
+            inventoryQuantity: $inventoryQuantity,
             id: $this->id,
             shopifyVariantId: $this->shopifyVariantId,
-            weight: $this->weight,
-            weightUnit: $this->weightUnit,
+            weight: $changes['weight'] ?? $this->weight,
+            weightUnit: $changes['weightUnit'] ?? $this->weightUnit,
         );
+    }
+
+    public function withPrice(Price $price): self
+    {
+        return $this->with(['price' => $price]);
     }
 
     public function withInventoryQuantity(int $quantity): self
     {
-        return new self(
-            sku: $this->sku,
-            price: $this->price,
-            inventoryQuantity: $quantity,
-            id: $this->id,
-            shopifyVariantId: $this->shopifyVariantId,
-            weight: $this->weight,
-            weightUnit: $this->weightUnit,
-        );
+        return $this->with(['inventoryQuantity' => $quantity]);
     }
 
     public function isInStock(): bool
     {
         return $this->inventoryQuantity > 0;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id,
-            'sku' => $this->sku->value,
-            'price' => $this->price->amount,
-            'currency' => $this->price->currency->value,
-            'inventory_quantity' => $this->inventoryQuantity,
-            'shopify_variant_id' => $this->shopifyVariantId,
-            'weight' => $this->weight,
-            'weight_unit' => $this->weightUnit,
-        ];
     }
 }

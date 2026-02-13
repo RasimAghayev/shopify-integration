@@ -15,7 +15,9 @@ use Src\Infrastructure\Events\LaravelEventDispatcher;
 use Src\Infrastructure\External\Shopify\MockShopifyClient;
 use Src\Infrastructure\External\Shopify\ShopifyClient;
 use Src\Infrastructure\Logger\LaravelLogger;
+use Src\Infrastructure\Mappers\ProductMapper;
 use Src\Infrastructure\Persistence\Repositories\EloquentProductRepository;
+use Src\Application\Services\CacheKeyGenerator;
 
 final class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,10 @@ final class AppServiceProvider extends ServiceProvider
         $this->app->bind(CacheInterface::class, RedisCache::class);
         $this->app->bind(LoggerInterface::class, LaravelLogger::class);
         $this->app->bind(EventDispatcherInterface::class, LaravelEventDispatcher::class);
+
+        // Register new services as singletons
+        $this->app->singleton(CacheKeyGenerator::class);
+        $this->app->singleton(ProductMapper::class);
 
         $this->app->bind(ShopifyClientInterface::class, function ($app) {
             // Use mock client for development/testing

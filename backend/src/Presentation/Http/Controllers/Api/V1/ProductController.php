@@ -7,7 +7,8 @@ namespace Src\Presentation\Http\Controllers\Api\V1;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Cache;
+use Src\Application\Contracts\CacheInterface;
+use Src\Application\Services\CacheKeyGenerator;
 use Src\Application\UseCases\Product\GetProductDetails\GetProductDetailsUseCase;
 use Src\Application\UseCases\Product\GetProductDetails\GetProductDTO;
 use Src\Domain\Product\Exceptions\ProductNotFoundException;
@@ -23,6 +24,8 @@ final class ProductController extends Controller
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
         private readonly GetProductDetailsUseCase $getProductUseCase,
+        private readonly CacheInterface $cache,
+        private readonly CacheKeyGenerator $cacheKeyGenerator,
     ) {}
 
     public function index(Request $request): JsonResponse
@@ -30,18 +33,20 @@ final class ProductController extends Controller
         $page = $request->integer('page', 1);
         $perPage = $request->integer('per_page', 10);
 
-        $cacheKey = "products_json_{$page}_{$perPage}";
+        $cacheKey = $this->cacheKeyGenerator->productsListKey($page, $perPage);
+        $tags = [$this->cacheKeyGenerator->getProductsTag()];
 
-        $cachedResponse = Cache::get($cacheKey);
-        if ($cachedResponse !== null) {
-            return response()->json($cachedResponse);
-        }
+        $responseData = $this->cache->rememberWithTags(
+            $tags,
+            $cacheKey,
+            self::CACHE_TTL,
+            function () use ($page, $perPage) {
+                $result = $this->productRepository->findAll($page, $perPage);
+                $collection = new ProductCollection($result);
 
-        $result = $this->productRepository->findAll($page, $perPage);
-        $collection = new ProductCollection($result);
-        $responseData = $collection->response()->getData(true);
-
-        Cache::put($cacheKey, $responseData, self::CACHE_TTL);
+                return $collection->response()->getData(true);
+            }
+        );
 
         return response()->json($responseData);
     }

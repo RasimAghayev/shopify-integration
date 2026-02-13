@@ -18,9 +18,15 @@ final class EloquentProductRepository implements ProductRepositoryInterface
 {
     public function save(Product $product): Product
     {
+        // Use shopify_id for matching if available, otherwise use sku
+        $matchCriteria = $product->shopifyId !== null
+            ? ['shopify_id' => $product->shopifyId]
+            : ['sku' => $product->sku->value];
+
         $model = ProductModel::updateOrCreate(
-            ['sku' => $product->sku->value],
+            $matchCriteria,
             [
+                'sku' => $product->sku->value,
                 'title' => $product->title,
                 'description' => $product->description,
                 'price' => $product->price->amount,

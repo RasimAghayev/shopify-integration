@@ -43,6 +43,21 @@ final readonly class RedisCache implements CacheInterface
         Cache::flush();
     }
 
+    public function setWithTags(array $tags, string $key, mixed $value, int $ttl = 3600): void
+    {
+        Cache::tags($tags)->put($this->prefixKey($key), $value, $ttl);
+    }
+
+    public function rememberWithTags(array $tags, string $key, int $ttl, callable $callback): mixed
+    {
+        return Cache::tags($tags)->remember($this->prefixKey($key), $ttl, $callback);
+    }
+
+    public function flushTags(array $tags): void
+    {
+        Cache::tags($tags)->flush();
+    }
+
     private function prefixKey(string $key): string
     {
         return $this->prefix.$key;

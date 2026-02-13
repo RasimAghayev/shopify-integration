@@ -37,4 +37,26 @@ interface CacheInterface
      * Clear all cache
      */
     public function flush(): void;
+
+    /**
+     * Store an item in the cache with tags
+     *
+     * @param  array<string>  $tags
+     * @param  int  $ttl  Time to live in seconds
+     */
+    public function setWithTags(array $tags, string $key, mixed $value, int $ttl = 3600): void;
+
+    /**
+     * Get an item from cache with tags, or execute callback and store the result
+     *
+     * @param  array<string>  $tags
+     */
+    public function rememberWithTags(array $tags, string $key, int $ttl, callable $callback): mixed;
+
+    /**
+     * Flush all cache entries for given tags
+     *
+     * @param  array<string>  $tags
+     */
+    public function flushTags(array $tags): void;
 }

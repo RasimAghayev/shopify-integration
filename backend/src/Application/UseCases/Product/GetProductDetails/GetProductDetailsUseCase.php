@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\Application\UseCases\Product\GetProductDetails;
 
 use Src\Application\Contracts\CacheInterface;
+use Src\Application\Services\CacheKeyGenerator;
 use Src\Domain\Product\Entities\Product;
 use Src\Domain\Product\Exceptions\ProductNotFoundException;
 use Src\Domain\Product\Repositories\ProductRepositoryInterface;
@@ -17,6 +18,7 @@ final readonly class GetProductDetailsUseCase
     public function __construct(
         private ProductRepositoryInterface $productRepository,
         private CacheInterface $cache,
+        private CacheKeyGenerator $cacheKeyGenerator,
     ) {}
 
     public function execute(GetProductDTO $dto): Product
@@ -54,14 +56,14 @@ final readonly class GetProductDetailsUseCase
     private function getCacheKey(GetProductDTO $dto): string
     {
         if ($dto->sku !== null) {
-            return "product.sku.{$dto->sku}";
+            return $this->cacheKeyGenerator->productBySkuKey($dto->sku);
         }
 
         if ($dto->id !== null) {
-            return "product.id.{$dto->id}";
+            return $this->cacheKeyGenerator->productByIdKey($dto->id);
         }
 
-        return "product.shopify.{$dto->shopifyId}";
+        return $this->cacheKeyGenerator->productByShopifyIdKey($dto->shopifyId ?? '');
     }
 
     private function createNotFoundException(GetProductDTO $dto): ProductNotFoundException

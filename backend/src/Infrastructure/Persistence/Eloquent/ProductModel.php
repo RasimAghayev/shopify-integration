@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Infrastructure\Persistence\Eloquent;
 
+use Database\Factories\ProductModelFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -67,5 +68,10 @@ final class ProductModel extends Model
     public function isInStock(): bool
     {
         return $this->inventory_quantity > 0;
+    }
+
+    protected static function newFactory(): ProductModelFactory
+    {
+        return ProductModelFactory::new();
     }
 }
