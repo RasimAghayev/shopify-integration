@@ -32,6 +32,8 @@ final class ShopifyClient implements ShopifyClientInterface
 
     /**
      * @return array<string, mixed>
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \JsonException
      */
     public function getProduct(string $shopifyId): array
     {
@@ -105,8 +107,9 @@ final class ShopifyClient implements ShopifyClientInterface
     }
 
     /**
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
      * @return array<string, mixed>
+     * @throws \Illuminate\Http\Client\ConnectionException|\JsonException
      */
     public function updateProduct(string $shopifyId, array $data): array
     {
@@ -126,6 +129,9 @@ final class ShopifyClient implements ShopifyClientInterface
         return $this->getProduct($shopifyId);
     }
 
+    /**
+     * @throws \Illuminate\Http\Client\ConnectionException
+     */
     public function getProductsCount(): int
     {
         if ($this->canUseAdminApi()) {
@@ -141,6 +147,7 @@ final class ShopifyClient implements ShopifyClientInterface
 
     /**
      * @return array<string, mixed>
+     * @throws \Illuminate\Http\Client\ConnectionException
      */
     public function updateInventory(string $inventoryItemId, int $quantity): array
     {
