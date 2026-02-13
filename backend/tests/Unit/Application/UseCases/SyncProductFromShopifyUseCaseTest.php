@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Application\UseCases;
 
-use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\MockObject\MockObject;
+use Src\Application\Contracts\CacheInterface;
 use Src\Application\Contracts\EventDispatcherInterface;
 use Src\Application\Contracts\LoggerInterface;
 use Src\Application\Contracts\ShopifyClientInterface;
+use Src\Application\Services\CacheKeyGenerator;
 use Src\Application\UseCases\Product\SyncProductFromShopify\SyncProductDTO;
 use Src\Application\UseCases\Product\SyncProductFromShopify\SyncProductFromShopifyUseCase;
 use Src\Domain\Product\Entities\Product;
@@ -26,24 +27,33 @@ final class SyncProductFromShopifyUseCaseTest extends TestCase
 
     private MockObject&LoggerInterface $logger;
 
+    private MockObject&CacheInterface $cache;
+
+    private CacheKeyGenerator $cacheKeyGenerator;
+
     private SyncProductFromShopifyUseCase $useCase;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        Cache::shouldReceive('forget')->andReturn(true);
-
         $this->shopifyClient = $this->createMock(ShopifyClientInterface::class);
         $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
+        $this->cache = $this->createMock(CacheInterface::class);
+        $this->cacheKeyGenerator = new CacheKeyGenerator();
+
+        // Allow cache flushTags to be called any number of times (void method)
+        $this->cache->method('flushTags');
 
         $this->useCase = new SyncProductFromShopifyUseCase(
             $this->shopifyClient,
             $this->productRepository,
             $this->eventDispatcher,
             $this->logger,
+            $this->cache,
+            $this->cacheKeyGenerator,
         );
     }
 

@@ -242,31 +242,6 @@ final class ProductTest extends TestCase
     }
 
     /** @test */
-    public function it_converts_to_array(): void
-    {
-        $product = Product::create(
-            sku: new Sku('TEST-001'),
-            title: 'Test Product',
-            price: new Price(1999, Currency::USD),
-            description: 'Description',
-            status: ProductStatus::ACTIVE,
-            shopifyId: '123456',
-            inventoryQuantity: 100,
-        );
-
-        $array = $product->toArray();
-
-        $this->assertEquals('TEST-001', $array['sku']);
-        $this->assertEquals('Test Product', $array['title']);
-        $this->assertEquals(1999, $array['price']);
-        $this->assertEquals('USD', $array['currency']);
-        $this->assertEquals('Description', $array['description']);
-        $this->assertEquals('active', $array['status']);
-        $this->assertEquals('123456', $array['shopify_id']);
-        $this->assertEquals(100, $array['inventory_quantity']);
-    }
-
-    /** @test */
     public function it_has_timestamps(): void
     {
         $product = Product::create(

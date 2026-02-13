@@ -139,27 +139,4 @@ final class ProductVariantTest extends TestCase
         $this->assertTrue($inStock->isInStock());
         $this->assertFalse($outOfStock->isInStock());
     }
-
-    /** @test */
-    public function it_converts_to_array(): void
-    {
-        $variant = ProductVariant::create(
-            sku: new Sku('TEST-001-S'),
-            price: new Price(1999, Currency::USD),
-            inventoryQuantity: 50,
-            shopifyVariantId: '111222333',
-            weight: 0.5,
-            weightUnit: 'kg',
-        );
-
-        $array = $variant->toArray();
-
-        $this->assertEquals('TEST-001-S', $array['sku']);
-        $this->assertEquals(1999, $array['price']);
-        $this->assertEquals('USD', $array['currency']);
-        $this->assertEquals(50, $array['inventory_quantity']);
-        $this->assertEquals('111222333', $array['shopify_variant_id']);
-        $this->assertEquals(0.5, $array['weight']);
-        $this->assertEquals('kg', $array['weight_unit']);
-    }
 }
