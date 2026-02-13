@@ -39,7 +39,7 @@ final class AppServiceProvider extends ServiceProvider
                 shopDomain: config('services.shopify.store_domain', ''),
                 accessToken: config('services.shopify.access_token', ''),
                 logger: $app->make(LoggerInterface::class),
-                apiVersion: config('services.shopify.api_version', '2024-04'),
+                apiVersion: config('services.shopify.api_version', '2026-01'),
                 clientId: config('services.shopify.api_key', ''),
                 clientSecret: config('services.shopify.api_secret', ''),
                 savedCatalog: config('services.shopify.saved_catalog', ''),
