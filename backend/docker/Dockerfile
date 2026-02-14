@@ -1,5 +1,5 @@
 # Stage 1: Base
-FROM php:8.4-fpm-alpine AS base
+FROM php:8.5-fpm-alpine AS base
 
 RUN apk add --no-cache \
     bash \
