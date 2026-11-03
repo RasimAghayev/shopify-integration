@@ -1,4 +1,6 @@
 # Shopify Integration - Production-Ready E-commerce System
+![Views](https://hits.sh/github.com/RasimAghayev/shopify-integration.svg?label=views&color=0e75b6)
+
 
 > A production-grade Shopify product synchronization system built with Clean Architecture, SOLID principles, and TDD approach. Demonstrates best practices in modern PHP and Vue.js development.
 
