@@ -10,7 +10,7 @@ use Src\Domain\Product\ValueObjects\Sku;
 
 final class SkuTest extends TestCase
 {
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_valid_sku(): void
     {
         $sku = new Sku('TEST-001');
@@ -18,7 +18,7 @@ final class SkuTest extends TestCase
         $this->assertEquals('TEST-001', $sku->value);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_sku_with_alphanumeric_characters(): void
     {
         $sku = new Sku('ABC123-XYZ-789');
@@ -26,7 +26,7 @@ final class SkuTest extends TestCase
         $this->assertEquals('ABC123-XYZ-789', $sku->value);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_for_empty_sku(): void
     {
         $this->expectException(InvalidSkuException::class);
@@ -35,7 +35,7 @@ final class SkuTest extends TestCase
         new Sku('');
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_for_whitespace_only_sku(): void
     {
         $this->expectException(InvalidSkuException::class);
@@ -43,7 +43,7 @@ final class SkuTest extends TestCase
         new Sku('   ');
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_for_sku_with_spaces(): void
     {
         $this->expectException(InvalidSkuException::class);
@@ -52,7 +52,7 @@ final class SkuTest extends TestCase
         new Sku('TEST 001');
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_for_sku_exceeding_max_length(): void
     {
         $this->expectException(InvalidSkuException::class);
@@ -61,7 +61,7 @@ final class SkuTest extends TestCase
         new Sku(str_repeat('A', 51));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_allows_sku_at_max_length(): void
     {
         $sku = new Sku(str_repeat('A', 50));
@@ -69,7 +69,7 @@ final class SkuTest extends TestCase
         $this->assertEquals(50, strlen($sku->value));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_for_special_characters(): void
     {
         $this->expectException(InvalidSkuException::class);
@@ -77,7 +77,7 @@ final class SkuTest extends TestCase
         new Sku('TEST@001!');
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_allows_underscores_in_sku(): void
     {
         $sku = new Sku('TEST_001_VARIANT');
@@ -85,7 +85,7 @@ final class SkuTest extends TestCase
         $this->assertEquals('TEST_001_VARIANT', $sku->value);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_compares_equality_correctly(): void
     {
         $sku1 = new Sku('TEST-001');
@@ -96,7 +96,7 @@ final class SkuTest extends TestCase
         $this->assertFalse($sku1->equals($sku3));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_converts_to_string(): void
     {
         $sku = new Sku('TEST-001');
@@ -104,7 +104,7 @@ final class SkuTest extends TestCase
         $this->assertEquals('TEST-001', (string) $sku);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_trims_whitespace_from_sku(): void
     {
         $sku = new Sku('  TEST-001  ');
@@ -112,7 +112,7 @@ final class SkuTest extends TestCase
         $this->assertEquals('TEST-001', $sku->value);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_converts_to_uppercase(): void
     {
         $sku = new Sku('test-001');

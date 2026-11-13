@@ -57,7 +57,7 @@ final class SyncProductFromShopifyUseCaseTest extends TestCase
         );
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_syncs_product_successfully(): void
     {
         $dto = new SyncProductDTO(shopifyId: '123456');
@@ -110,7 +110,7 @@ final class SyncProductFromShopifyUseCaseTest extends TestCase
         $this->assertEquals('Test Product', $result->title);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_existing_product(): void
     {
         $dto = new SyncProductDTO(shopifyId: '123456');
@@ -160,7 +160,7 @@ final class SyncProductFromShopifyUseCaseTest extends TestCase
         $this->assertEquals(2999, $result->price->amount);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_handles_shopify_api_error(): void
     {
         $dto = new SyncProductDTO(shopifyId: '123456');
@@ -179,7 +179,7 @@ final class SyncProductFromShopifyUseCaseTest extends TestCase
         $this->useCase->execute($dto);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_logs_sync_start_and_completion(): void
     {
         $dto = new SyncProductDTO(shopifyId: '123456');
@@ -221,7 +221,7 @@ final class SyncProductFromShopifyUseCaseTest extends TestCase
         $this->useCase->execute($dto);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_skips_update_when_force_is_false_and_product_exists(): void
     {
         $dto = new SyncProductDTO(shopifyId: '123456', forceUpdate: false);

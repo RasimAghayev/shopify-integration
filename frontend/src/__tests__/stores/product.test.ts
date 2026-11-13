@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useProductStore } from '~/stores/product'
 import type { Product } from '~/types/product'
@@ -76,7 +76,7 @@ describe('useProductStore', () => {
         store.filters = { search: 'TEST-001' }
 
         expect(store.filteredProducts).toHaveLength(1)
-        expect(store.filteredProducts[0].sku).toBe('TEST-001')
+        expect(store.filteredProducts[0]).toMatchObject({ sku: 'TEST-001' })
       })
 
       it('filters by search term in title', () => {
@@ -85,7 +85,7 @@ describe('useProductStore', () => {
         store.filters = { search: 'Product 2' }
 
         expect(store.filteredProducts).toHaveLength(1)
-        expect(store.filteredProducts[0].title).toBe('Test Product 2')
+        expect(store.filteredProducts[0]).toMatchObject({ title: 'Test Product 2' })
       })
 
       it('filters by status', () => {
@@ -94,7 +94,7 @@ describe('useProductStore', () => {
         store.filters = { status: 'active' }
 
         expect(store.filteredProducts).toHaveLength(1)
-        expect(store.filteredProducts[0].status).toBe('active')
+        expect(store.filteredProducts[0]).toMatchObject({ status: 'active' })
       })
 
       it('filters by inStock', () => {
@@ -103,7 +103,7 @@ describe('useProductStore', () => {
         store.filters = { inStock: true }
 
         expect(store.filteredProducts).toHaveLength(1)
-        expect(store.filteredProducts[0].inStock).toBe(true)
+        expect(store.filteredProducts[0]).toMatchObject({ inStock: true })
       })
 
       it('combines multiple filters', () => {
@@ -112,7 +112,7 @@ describe('useProductStore', () => {
         store.filters = { search: 'Test', status: 'active' }
 
         expect(store.filteredProducts).toHaveLength(1)
-        expect(store.filteredProducts[0].sku).toBe('TEST-001')
+        expect(store.filteredProducts[0]).toMatchObject({ sku: 'TEST-001' })
       })
     })
 

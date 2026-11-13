@@ -11,22 +11,22 @@ import {
 describe('formatters', () => {
   describe('formatPrice', () => {
     it('formats USD price correctly', () => {
-      const price = { amount: 1999, currency: 'USD' }
+      const price = { amount: 1999, formatted: '$19.99', currency: 'USD' }
       expect(formatPrice(price)).toBe('$19.99')
     })
 
     it('formats zero price', () => {
-      const price = { amount: 0, currency: 'USD' }
+      const price = { amount: 0, formatted: '$0.00', currency: 'USD' }
       expect(formatPrice(price)).toBe('$0.00')
     })
 
     it('formats large price', () => {
-      const price = { amount: 99999, currency: 'USD' }
+      const price = { amount: 99999, formatted: '$999.99', currency: 'USD' }
       expect(formatPrice(price)).toBe('$999.99')
     })
 
     it('formats EUR price correctly', () => {
-      const price = { amount: 2500, currency: 'EUR' }
+      const price = { amount: 2500, formatted: '€25.00', currency: 'EUR' }
       const result = formatPrice(price)
       expect(result).toContain('25')
     })

@@ -13,7 +13,7 @@ use Src\Domain\Product\ValueObjects\Sku;
 
 final class ProductVariantTest extends TestCase
 {
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_variant_with_required_fields(): void
     {
         $variant = ProductVariant::create(
@@ -27,7 +27,7 @@ final class ProductVariantTest extends TestCase
         $this->assertEquals(50, $variant->inventoryQuantity);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_variant_with_all_fields(): void
     {
         $variant = ProductVariant::create(
@@ -44,7 +44,7 @@ final class ProductVariantTest extends TestCase
         $this->assertEquals('kg', $variant->weightUnit);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_from_shopify_data(): void
     {
         $data = [
@@ -64,7 +64,7 @@ final class ProductVariantTest extends TestCase
         $this->assertEquals('111222333', $variant->shopifyVariantId);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_for_negative_inventory(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -77,7 +77,7 @@ final class ProductVariantTest extends TestCase
         );
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_for_negative_weight(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -91,7 +91,7 @@ final class ProductVariantTest extends TestCase
         );
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_price(): void
     {
         $variant = ProductVariant::create(
@@ -106,7 +106,7 @@ final class ProductVariantTest extends TestCase
         $this->assertEquals(1999, $variant->price->amount);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_inventory(): void
     {
         $variant = ProductVariant::create(
@@ -121,7 +121,7 @@ final class ProductVariantTest extends TestCase
         $this->assertEquals(50, $variant->inventoryQuantity);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_checks_if_in_stock(): void
     {
         $inStock = ProductVariant::create(

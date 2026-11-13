@@ -3,10 +3,16 @@
 /frontend/node_modules
 
 # Environment files
-.env
-.env.local
-.env.*.local
+.env*
+!.env.example
+!.env.*.example
 *.env
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
 
 # IDE
 .idea

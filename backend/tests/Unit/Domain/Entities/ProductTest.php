@@ -15,7 +15,7 @@ use Src\Domain\Product\ValueObjects\Sku;
 
 final class ProductTest extends TestCase
 {
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_product_with_required_fields(): void
     {
         $product = Product::create(
@@ -30,7 +30,7 @@ final class ProductTest extends TestCase
         $this->assertEquals(ProductStatus::DRAFT, $product->status);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_product_with_all_fields(): void
     {
         $product = Product::create(
@@ -49,7 +49,7 @@ final class ProductTest extends TestCase
         $this->assertEquals(100, $product->inventoryQuantity);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_product_from_shopify_data(): void
     {
         $shopifyData = [
@@ -76,7 +76,7 @@ final class ProductTest extends TestCase
         $this->assertEquals(1999, $product->price->amount);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_for_missing_variants(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -89,7 +89,7 @@ final class ProductTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_for_missing_sku(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -103,7 +103,7 @@ final class ProductTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_title(): void
     {
         $product = Product::create(
@@ -118,7 +118,7 @@ final class ProductTest extends TestCase
         $this->assertEquals('Original Title', $product->title);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_price(): void
     {
         $product = Product::create(
@@ -133,7 +133,7 @@ final class ProductTest extends TestCase
         $this->assertEquals(1999, $product->price->amount);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_status(): void
     {
         $product = Product::create(
@@ -148,7 +148,7 @@ final class ProductTest extends TestCase
         $this->assertEquals(ProductStatus::DRAFT, $product->status);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_inventory(): void
     {
         $product = Product::create(
@@ -164,7 +164,7 @@ final class ProductTest extends TestCase
         $this->assertEquals(100, $product->inventoryQuantity);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_for_negative_inventory(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -178,7 +178,7 @@ final class ProductTest extends TestCase
         );
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_checks_if_in_stock(): void
     {
         $inStock = Product::create(
@@ -199,7 +199,7 @@ final class ProductTest extends TestCase
         $this->assertFalse($outOfStock->isInStock());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_checks_if_active(): void
     {
         $active = Product::create(
@@ -220,7 +220,7 @@ final class ProductTest extends TestCase
         $this->assertFalse($draft->isActive());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_adds_variant(): void
     {
         $product = Product::create(
@@ -241,7 +241,7 @@ final class ProductTest extends TestCase
         $this->assertCount(0, $product->variants);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_has_timestamps(): void
     {
         $product = Product::create(
