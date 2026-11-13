@@ -9,7 +9,7 @@ use Src\Domain\Product\ValueObjects\ProductStatus;
 
 final class ProductStatusTest extends TestCase
 {
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_active_status(): void
     {
         $status = ProductStatus::ACTIVE;
@@ -17,7 +17,7 @@ final class ProductStatusTest extends TestCase
         $this->assertEquals('active', $status->value);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_draft_status(): void
     {
         $status = ProductStatus::DRAFT;
@@ -25,7 +25,7 @@ final class ProductStatusTest extends TestCase
         $this->assertEquals('draft', $status->value);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_archived_status(): void
     {
         $status = ProductStatus::ARCHIVED;
@@ -33,7 +33,7 @@ final class ProductStatusTest extends TestCase
         $this->assertEquals('archived', $status->value);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_from_string(): void
     {
         $status = ProductStatus::fromString('active');
@@ -41,7 +41,7 @@ final class ProductStatusTest extends TestCase
         $this->assertEquals(ProductStatus::ACTIVE, $status);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_from_uppercase_string(): void
     {
         $status = ProductStatus::fromString('ACTIVE');
@@ -49,7 +49,7 @@ final class ProductStatusTest extends TestCase
         $this->assertEquals(ProductStatus::ACTIVE, $status);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_from_mixed_case_string(): void
     {
         $status = ProductStatus::fromString('Active');
@@ -57,7 +57,7 @@ final class ProductStatusTest extends TestCase
         $this->assertEquals(ProductStatus::ACTIVE, $status);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_for_invalid_status(): void
     {
         $this->expectException(\ValueError::class);
@@ -65,7 +65,7 @@ final class ProductStatusTest extends TestCase
         ProductStatus::fromString('invalid');
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_checks_if_active(): void
     {
         $active = ProductStatus::ACTIVE;
@@ -75,7 +75,7 @@ final class ProductStatusTest extends TestCase
         $this->assertFalse($draft->isActive());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_checks_if_draft(): void
     {
         $draft = ProductStatus::DRAFT;
@@ -85,7 +85,7 @@ final class ProductStatusTest extends TestCase
         $this->assertFalse($active->isDraft());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_checks_if_archived(): void
     {
         $archived = ProductStatus::ARCHIVED;
@@ -95,7 +95,7 @@ final class ProductStatusTest extends TestCase
         $this->assertFalse($active->isArchived());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_checks_if_editable(): void
     {
         $active = ProductStatus::ACTIVE;
@@ -107,7 +107,7 @@ final class ProductStatusTest extends TestCase
         $this->assertFalse($archived->isEditable());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_all_statuses(): void
     {
         $statuses = ProductStatus::all();
@@ -118,7 +118,7 @@ final class ProductStatusTest extends TestCase
         $this->assertContains(ProductStatus::ARCHIVED, $statuses);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_converts_to_string(): void
     {
         $status = ProductStatus::ACTIVE;

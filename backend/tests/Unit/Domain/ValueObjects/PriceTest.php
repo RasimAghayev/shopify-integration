@@ -12,7 +12,7 @@ use Src\Domain\Product\ValueObjects\Price;
 
 final class PriceTest extends TestCase
 {
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_valid_price(): void
     {
         $price = new Price(1999, Currency::USD);
@@ -21,7 +21,7 @@ final class PriceTest extends TestCase
         $this->assertEquals(Currency::USD, $price->currency);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_converts_to_decimal(): void
     {
         $price = new Price(1999, Currency::USD);
@@ -29,7 +29,7 @@ final class PriceTest extends TestCase
         $this->assertEquals(19.99, $price->toDecimal());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_converts_zero_to_decimal(): void
     {
         $price = new Price(0, Currency::USD);
@@ -37,7 +37,7 @@ final class PriceTest extends TestCase
         $this->assertEquals(0.00, $price->toDecimal());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_for_negative_amount(): void
     {
         $this->expectException(InvalidPriceException::class);
@@ -46,7 +46,7 @@ final class PriceTest extends TestCase
         new Price(-100, Currency::USD);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_allows_zero_price(): void
     {
         $price = new Price(0, Currency::USD);
@@ -54,7 +54,7 @@ final class PriceTest extends TestCase
         $this->assertEquals(0, $price->amount);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_compares_less_than(): void
     {
         $price1 = new Price(1000, Currency::USD);
@@ -64,7 +64,7 @@ final class PriceTest extends TestCase
         $this->assertFalse($price2->isLessThan($price1));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_compares_greater_than(): void
     {
         $price1 = new Price(2000, Currency::USD);
@@ -74,7 +74,7 @@ final class PriceTest extends TestCase
         $this->assertFalse($price2->isGreaterThan($price1));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_compares_equality(): void
     {
         $price1 = new Price(1999, Currency::USD);
@@ -85,7 +85,7 @@ final class PriceTest extends TestCase
         $this->assertFalse($price1->equals($price3));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_when_comparing_different_currencies(): void
     {
         $this->expectException(CurrencyMismatchException::class);
@@ -96,7 +96,7 @@ final class PriceTest extends TestCase
         $priceUsd->isLessThan($priceEur);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_adds_prices_with_same_currency(): void
     {
         $price1 = new Price(1000, Currency::USD);
@@ -108,7 +108,7 @@ final class PriceTest extends TestCase
         $this->assertEquals(Currency::USD, $result->currency);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_when_adding_different_currencies(): void
     {
         $this->expectException(CurrencyMismatchException::class);
@@ -119,7 +119,7 @@ final class PriceTest extends TestCase
         $priceUsd->add($priceEur);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_subtracts_prices_with_same_currency(): void
     {
         $price1 = new Price(1000, Currency::USD);
@@ -130,7 +130,7 @@ final class PriceTest extends TestCase
         $this->assertEquals(700, $result->amount);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_exception_when_subtraction_results_in_negative(): void
     {
         $this->expectException(InvalidPriceException::class);
@@ -141,7 +141,7 @@ final class PriceTest extends TestCase
         $price1->subtract($price2);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_multiplies_price_by_quantity(): void
     {
         $price = new Price(1000, Currency::USD);
@@ -151,7 +151,7 @@ final class PriceTest extends TestCase
         $this->assertEquals(3000, $result->amount);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_formats_price_as_string(): void
     {
         $price = new Price(1999, Currency::USD);
@@ -159,7 +159,7 @@ final class PriceTest extends TestCase
         $this->assertEquals('$19.99', $price->format());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_formats_euro_price(): void
     {
         $price = new Price(1999, Currency::EUR);
@@ -167,7 +167,7 @@ final class PriceTest extends TestCase
         $this->assertEquals('19.99 EUR', $price->format());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_from_decimal(): void
     {
         $price = Price::fromDecimal(19.99, Currency::USD);
@@ -175,7 +175,7 @@ final class PriceTest extends TestCase
         $this->assertEquals(1999, $price->amount);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_zero_price(): void
     {
         $price = Price::zero(Currency::USD);

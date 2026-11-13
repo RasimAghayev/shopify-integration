@@ -23,7 +23,7 @@ final class ProductMapperTest extends TestCase
         $this->mapper = new ProductMapper();
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_converts_product_to_array(): void
     {
         $product = Product::create(
@@ -48,7 +48,7 @@ final class ProductMapperTest extends TestCase
         $this->assertEquals(100, $array['inventory_quantity']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_converts_variant_to_array(): void
     {
         $variant = ProductVariant::create(
@@ -71,7 +71,7 @@ final class ProductMapperTest extends TestCase
         $this->assertEquals('kg', $array['weight_unit']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_converts_product_to_persistence_array(): void
     {
         $product = Product::create(
@@ -97,7 +97,7 @@ final class ProductMapperTest extends TestCase
         $this->assertArrayNotHasKey('sku', $array);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_handles_null_optional_fields(): void
     {
         $product = Product::create(
@@ -112,7 +112,7 @@ final class ProductMapperTest extends TestCase
         $this->assertNull($array['shopify_id']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_includes_variants_in_product_array(): void
     {
         $product = Product::create(
@@ -134,7 +134,7 @@ final class ProductMapperTest extends TestCase
         $this->assertEquals('TEST-001-S', $array['variants'][0]['sku']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_formats_dates_correctly(): void
     {
         $product = Product::create(
