@@ -24,7 +24,7 @@
   "devDependencies": {
     "@nuxt/devtools": "^3.2.1",
     "@playwright/test": "^1.40.0",
-    "@types/node": "^25.0.0",
+    "@types/node": "^26.0.0",
     "@vitejs/plugin-vue": "^6.0.4",
     "@vue/test-utils": "^2.4.6",
     "eslint": "10.14.0",
